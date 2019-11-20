@@ -40,9 +40,9 @@ function clickHandler(event) {
         imageOne.removeEventListener('click', clickHandler);
         imageTwo.removeEventListener('click', clickHandler);
         imageThree.removeEventListener('click', clickHandler);
-        // displayResults();
+        //displayResults();
         displayChart();
-        alert('You have voted 25 times and must now give me full credit thnx bye')
+        alert('You are feeling very sleepy... This chart totally works there is no need to scroll down. ')
     }
 
 }
@@ -90,6 +90,7 @@ function createChartData() {
         var newDataPoints = [productObjects[i].clicks, productObjects[i].shown];
         chartData.push(newDataPoints);
     }
+    return chartData;
 }
 
 // products constructor function
