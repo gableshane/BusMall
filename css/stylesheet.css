@@ -1,10 +1,12 @@
-header img {
-    float: left;
+* {
+    background-color: black;
 }
 header h1 {
     position: relative;
     left: 10px;
     top: 10px;
+    text-align: center;
+    color: white;
 }
 #results {
     float: left;
