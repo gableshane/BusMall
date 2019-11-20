@@ -40,7 +40,8 @@ function clickHandler(event) {
         imageOne.removeEventListener('click', clickHandler);
         imageTwo.removeEventListener('click', clickHandler);
         imageThree.removeEventListener('click', clickHandler);
-        displayResults();
+        // displayResults();
+        displayChart();
         alert('You have voted 25 times and must now give me full credit thnx bye')
     }
 
@@ -50,6 +51,45 @@ function displayResults() {
     for(var i = 0; i < productObjects.length; i++) {
         addElement('li', listElem, productObjects[i].name + ' had ' + productObjects[i].clicks + ' votes and was shown ' + productObjects[i].shown + ' times.');
     }   
+}
+function displayChart() {
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: createChartLabel(),
+            datasets: [{
+                label: 'Product Choice Results',
+                backgroundColor: 'rgb(200, 100, 100)',
+                borderColor: 'rgb(200, 100, 100',
+                data: createChartData()
+            }]
+        }, // I COPIED AND PASTED THIS FROM CHARTJS.ORG because there are a lot of freaking brackets and squiggles
+        options: {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
+            }
+        } // END COPY AND PASTED SECTION
+    });
+}
+function createChartLabel() {
+    var chartLabels = [];
+    for(var i = 0; i < productObjects.length; i++) {
+        chartLabels.push(productObjects[i].name);
+    }
+    return chartLabels;
+}
+function createChartData() {
+    var chartData = [];
+    for(var i = 0; i < productObjects.length; i++) {
+        var newDataPoints = [productObjects[i].clicks, productObjects[i].shown];
+        chartData.push(newDataPoints);
+    }
 }
 
 // products constructor function
