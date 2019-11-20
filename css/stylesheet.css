@@ -11,7 +11,6 @@ header h1 {
     margin-left: -165px;
     width: 300px;
     height: 500px;
-    border-style: dashed;
 }
 h3 {
     text-align: center;
@@ -19,16 +18,4 @@ h3 {
 #images {
     display: inline;
     position: relative;
-}
-p {
-    border-style: dashed;
-    margin-left: 300px;
-    margin-right: 120px;
-    margin-top: 70px;
-}
-footer {
-    border-style: dashed;
-}
-footer h1 {
-    text-align: center;
 }
