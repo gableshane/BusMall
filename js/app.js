@@ -37,21 +37,27 @@ function clickHandler(event) {
         votingRoundsCounter++;
         renderThreeChoices();
     } else {
-        imageOne.removeEventListener('click', clickHandler);
+        endProgram();
+    }
+
+}
+// ends the app
+function endProgram() {
+    imageOne.removeEventListener('click', clickHandler);
         imageTwo.removeEventListener('click', clickHandler);
         imageThree.removeEventListener('click', clickHandler);
         //displayResults();
         displayChart();
-        alert('You are feeling very sleepy... This chart totally works there is no need to scroll down. ')
-    }
-
+        alert('You have chosen 25 products. Please scroll down to view the chart.')
 }
+// displays list of results on the left
 function displayResults() {
     var listElem = document.getElementById('display');
     for(var i = 0; i < productObjects.length; i++) {
         addElement('li', listElem, productObjects[i].name + ' had ' + productObjects[i].clicks + ' votes and was shown ' + productObjects[i].shown + ' times.');
     }   
 }
+//displays the chart
 function displayChart() {
     var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {
@@ -59,10 +65,15 @@ function displayChart() {
         data: {
             labels: createChartLabel(),
             datasets: [{
-                label: 'Product Choice Results',
+                label: 'Clicks',
                 backgroundColor: 'rgb(200, 100, 100)',
                 borderColor: 'rgb(200, 100, 100',
-                data: createChartData()
+                data: createChartDataClicks()
+            }, {
+                label: 'Shown',
+                backgroundColor: 'rgb(300, 200, 200)',
+                borderColor: 'rgb(300, 200, 200',
+                data: createChartDataShown()
             }]
         }, // I COPIED AND PASTED THIS FROM CHARTJS.ORG because there are a lot of freaking brackets and squiggles
         options: {
@@ -77,6 +88,7 @@ function displayChart() {
         } // END COPY AND PASTED SECTION
     });
 }
+// gets labels for the chart
 function createChartLabel() {
     var chartLabels = [];
     for(var i = 0; i < productObjects.length; i++) {
@@ -84,15 +96,23 @@ function createChartLabel() {
     }
     return chartLabels;
 }
-function createChartData() {
-    var chartData = [];
+// gets dataset for the chart
+function createChartDataClicks() {
+    var chartDataClicks = [];
     for(var i = 0; i < productObjects.length; i++) {
-        var newDataPoints = [productObjects[i].clicks, productObjects[i].shown];
-        chartData.push(newDataPoints);
+        var newDataClicks = [productObjects[i].clicks];
+        chartDataClicks.push(newDataClicks);
     }
-    return chartData;
+    return chartDataClicks;
 }
-
+function createChartDataShown() {
+    var chartDataShown = [];
+    for(var i = 0; i < productObjects.length; i++) {
+        var newDataShown = [productObjects[i].shown];
+        chartDataShown.push(newDataShown);
+    }
+    return chartDataShown;
+}
 // products constructor function
 function Product(productName, productImg) {
     this.name = productName;
