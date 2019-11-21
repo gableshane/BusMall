@@ -1,12 +1,11 @@
 'use strict;'
-// GLOBAL VARIABLES
 // list of product names/image paths
 var products = [['bag', 'img/bag.jpg'], ['banana', 'img/banana.jpg'
 ], ['bathroom', 'img/bathroom.jpg'], ['boots', 'img/boots.jpg'], ['breakfast', 'img/breakfast.jpg'], ['bubblegum', 'img/bubblegum.jpg'], ['chair', 'img/chair.jpg'], ['cthulhu', 'img/cthulhu.jpg'], ['dog-duck', 'img/dog-duck.jpg'], ['dragon', 'img/dragon.jpg'], ['pen', 'img/pen.jpg'], ['pet-sweep', 'img/pet-sweep.jpg'], ['scissors', 'img/scissors.jpg'], ['shark', 'img/shark.jpg'], ['sweep', 'img/sweep.png'], ['tauntaun', 'img/tauntaun.jpg'], ['unicorn', 'img/unicorn.jpg'], ['usb', 'img/usb.gif'], ['water-can', 'img/water-can.jpg'], ['wine-glass', 'img/wine-glass.jpg']];
-// variable to store objects
 var roundLimit = 25;
 var votingRoundsCounter = 1;
 var productObjects = [];
+var newProductObjects = []
 var previousChoices = [];
 var imageOne = document.getElementById('imgOne')
 var imageTwo = document.getElementById('imgTwo');
@@ -14,7 +13,7 @@ var imageThree = document.getElementById('imgThree');
 imageOne.addEventListener('click', clickHandler);
 imageTwo.addEventListener('click', clickHandler);
 imageThree.addEventListener('click', clickHandler);
-
+// Took from Salmon Cookies project
 function addElement(tag, container, text) {
     var element = document.createElement(tag);
     container.appendChild(element);
@@ -48,6 +47,7 @@ function endProgram() {
         imageThree.removeEventListener('click', clickHandler);
         //displayResults();
         displayChart();
+        storeData();
         alert('You have chosen 25 products. Please scroll down to view the chart.')
 }
 // displays list of results on the left
@@ -66,13 +66,13 @@ function displayChart() {
             labels: createChartLabel(),
             datasets: [{
                 label: 'Clicks',
-                backgroundColor: 'rgb(200, 100, 100)',
-                borderColor: 'rgb(200, 100, 100',
+                backgroundColor: 'blue',
+                borderColor: 'blue',
                 data: createChartDataClicks()
             }, {
                 label: 'Shown',
-                backgroundColor: 'rgb(300, 200, 200)',
-                borderColor: 'rgb(300, 200, 200',
+                backgroundColor: 'grey',
+                borderColor: 'grey',
                 data: createChartDataShown()
             }]
         }, // I COPIED AND PASTED THIS FROM CHARTJS.ORG because there are a lot of freaking brackets and squiggles
@@ -114,18 +114,20 @@ function createChartDataShown() {
     return chartDataShown;
 }
 // products constructor function
-function Product(productName, productImg) {
+function Product(productName, productImg, clicks=0, shown=0) {
     this.name = productName;
     this.img = productImg;
-    this.clicks = 0;
-    this.shown = 0;
+    this.clicks = clicks;
+    this.shown = shown;
 }
 Product.prototype.show = function() {
     this.shown++;
 }
 // instatiates all the objects into the array.
-for(var i = 0; i < products.length; i++) {
-    productObjects.push(new Product(products[i][0], products[i][1]));
+function createInitialObjects() {
+    for(var i = 0; i < products.length; i++) {
+        productObjects.push(new Product(products[i][0], products[i][1]));
+        }
 }
 function randomProductGenerator() {
     var productChoices = [];
@@ -147,4 +149,28 @@ function renderThreeChoices() {
     productObjects[threeProducts[1]].show();
     productObjects[threeProducts[2]].show();
 }
-renderThreeChoices();
+function storeData() {
+    var storageArr = [];
+    for(var i = 0; i < productObjects.length; i++) {
+        storageArr.push(JSON.stringify(productObjects[i]));
+        localStorage.setItem(productObjects[i].name, storageArr[i]);
+    }   
+}
+function getData() {
+    for(var i = 0; i < localStorage.length; i++) {
+        var object = JSON.parse(localStorage[productObjects[i].name]);
+        newProductObjects.push(new Product(object.name, object.img, object.clicks, object.shown));
+    }
+}
+function runApp() {
+    if (localStorage.length === 0) {
+        createInitialObjects();
+        renderThreeChoices();
+    } else {
+        createInitialObjects();
+        getData();
+        productObjects = newProductObjects.slice();
+        renderThreeChoices();
+        }
+    }
+runApp();
